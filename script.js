@@ -2,10 +2,10 @@ function hybridEncode(text) {
     const encoded = [];
     for (let char of text) {
       if (char.charCodeAt(0) < 128) {
-        encoded.push("A" + char.charCodeAt(0));
+        encoded.push("1" + char.charCodeAt(0));
       } else {
         const utf8 = new TextEncoder().encode(char);
-        encoded.push("U" + Array.from(utf8).join("-"));
+        encoded.push("2" + Array.from(utf8).join("-"));
       }
     }
     return encoded.join(" ");
@@ -16,9 +16,9 @@ function hybridEncode(text) {
     let decoded = "";
   
     for (let token of tokens) {
-      if (token.startsWith("A")) {
+      if (token.startsWith("1")) {
         decoded += String.fromCharCode(parseInt(token.slice(1)));
-      } else if (token.startsWith("U")) {
+      } else if (token.startsWith("2")) {
         const byteArray = token.slice(1).split("-").map(num => parseInt(num));
         decoded += new TextDecoder().decode(new Uint8Array(byteArray));
       }
